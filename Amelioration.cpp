@@ -213,6 +213,7 @@ int main() {
     
     flotte.ajouterEmploye(Employe("Abdelkhalek"));
     flotte.ajouterEmploye(Employe("Aymane"));
+    flotte.ajouterEmploye(Employe("Ihsan"));
 
     int choix;
     string marque, modele, nomEmploye;
