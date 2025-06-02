@@ -188,37 +188,120 @@ public:
     }
 };
 
+void afficherMenu() {
+    cout << "\n=== 🚗 Système de Gestion de Flotte ===\n";
+    cout << "1. Afficher les véhicules disponibles\n";
+    cout << "2. Afficher tous les véhicules\n";
+    cout << "3. Afficher les réservations des employés\n";
+    cout << "4. Réserver un véhicule\n";
+    cout << "5. Mettre à jour le kilométrage\n";
+    cout << "6. Générer rapport de la flotte\n";
+    cout << "7. Ajouter un nouveau véhicule\n";
+    cout << "8. Ajouter un nouvel employé\n";
+    cout << "0. Quitter\n";
+    cout << "Votre choix : ";
+}
+
 int main() {
-    // 1. Création de véhicules
     Flotte flotte;
+    
+    // Initialisation avec quelques véhicules et employés
     flotte.ajouterVehicule(make_unique<Vehicule>("Toyota", "Corolla", 50000, true));
     flotte.ajouterVehicule(make_unique<Vehicule>("Renault", "Clio", 30000, true));
     flotte.ajouterVehicule(make_unique<VehiculeElectrique>("BMW", "Model i4", 20000, true, 600));
     flotte.ajouterVehicule(make_unique<VehiculeElectrique>("Jaguar", "Model XE", 15000, true, 300));
-
-    // 2. Création des employés
+    
     flotte.ajouterEmploye(Employe("Abdelkhalek"));
     flotte.ajouterEmploye(Employe("Aymane"));
 
-    // 3. Affichage initial avant les modifications.
-    flotte.afficherVehiculesDisponibles();
-    flotte.afficherReservationsEmployes();
+    int choix;
+    string marque, modele, nomEmploye;
+    int kilometrage, autonomie;
+    bool estElectrique;
 
-    // 4. Simuler des réservations
-    flotte.reserverVehicule("Corolla", "Abdelkhalek");
-    flotte.reserverVehicule("Model i4", "Aymane");
-    flotte.reserverVehicule("Clio", "Inexistant"); // Test employé inexistant
+    do {
+        afficherMenu();
+        cin >> choix;
+        cin.ignore(); // Pour consommer le retour à la ligne
 
-    // 5. Mise à jour des véhicules après usage
-    flotte.miseAJourKilometrage("Corolla", 50500);
-    flotte.miseAJourKilometrage("Corolla", 49000); // Test avec kilométrage invalide
+        switch (choix) {
+            case 1:
+                cout << "\n=== Véhicules Disponibles ===\n";
+                flotte.afficherVehiculesDisponibles();
+                break;
 
-    // 6. Affichage final apret les modifications.
-    flotte.afficherFlotte();
-    flotte.afficherReservationsEmployes();
+            case 2:
+                cout << "\n=== Tous les Véhicules ===\n";
+                flotte.afficherFlotte();
+                break;
 
-    // 7. Génération de rapport
-    flotte.genererRapport();
+            case 3:
+                cout << "\n=== Réservations des Employés ===\n";
+                flotte.afficherReservationsEmployes();
+                break;
+
+            case 4:
+                cout << "\n=== Réservation de Véhicule ===\n";
+                cout << "Entrez le modèle du véhicule : ";
+                getline(cin, modele);
+                cout << "Entrez le nom de l'employé : ";
+                getline(cin, nomEmploye);
+                flotte.reserverVehicule(modele, nomEmploye);
+                break;
+
+            case 5:
+                cout << "\n=== Mise à Jour Kilométrage ===\n";
+                cout << "Entrez le modèle du véhicule : ";
+                getline(cin, modele);
+                cout << "Entrez le nouveau kilométrage : ";
+                cin >> kilometrage;
+                flotte.miseAJourKilometrage(modele, kilometrage);
+                break;
+
+            case 6:
+                cout << "\n=== Rapport de la Flotte ===\n";
+                flotte.genererRapport();
+                break;
+
+            case 7:
+                cout << "\n=== Ajout d'un Nouveau Véhicule ===\n";
+                cout << "Est-ce un véhicule électrique ? (1: Oui, 0: Non) : ";
+                cin >> estElectrique;
+                cin.ignore();
+                
+                cout << "Marque : ";
+                getline(cin, marque);
+                cout << "Modèle : ";
+                getline(cin, modele);
+                cout << "Kilométrage initial : ";
+                cin >> kilometrage;
+                
+                if (estElectrique) {
+                    cout << "Autonomie (km) : ";
+                    cin >> autonomie;
+                    flotte.ajouterVehicule(make_unique<VehiculeElectrique>(marque, modele, kilometrage, true, autonomie));
+                } else {
+                    flotte.ajouterVehicule(make_unique<Vehicule>(marque, modele, kilometrage, true));
+                }
+                cout << "Véhicule ajouté avec succès !\n";
+                break;
+
+            case 8:
+                cout << "\n=== Ajout d'un Nouvel Employé ===\n";
+                cout << "Nom de l'employé : ";
+                getline(cin, nomEmploye);
+                flotte.ajouterEmploye(Employe(nomEmploye));
+                cout << "Employé ajouté avec succès !\n";
+                break;
+
+            case 0:
+                cout << "\nAu revoir !\n";
+                break;
+
+            default:
+                cout << "\nChoix invalide. Veuillez réessayer.\n";
+        }
+    } while (choix != 0);
 
     return 0;
 }
