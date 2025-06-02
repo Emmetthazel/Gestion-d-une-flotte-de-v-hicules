@@ -1,114 +1,105 @@
-# 📝 Cahier des charges
+# 🚗 Vehicle Fleet Management System
 
-## 🎯 Projet : Gestion d'une flotte de véhicules
+## 📋 Project Overview
 
-### 🎯 Objectif
+A C++ application for managing a company's vehicle fleet, allowing employees to track and reserve vehicles for professional use.
 
-Modéliser une flotte de véhicules pour une société, où chaque véhicule peut être suivi en termes :
+### Key Features
+- Vehicle tracking (brand, model, mileage, availability)
+- Employee vehicle reservations
+- Fleet management and monitoring
+- Electric vehicle support
 
-- de marque,
-- de modèle,
-- de kilométrage,
-- et de disponibilité.
+## 🏗️ System Architecture
 
-Les employés peuvent réserver des véhicules pour **usage professionnel**.
+### Core Classes
 
----
+#### 1. Vehicle (`Vehicule`)
+**Properties:**
+- Brand (`marque`)
+- Model (`modele`)
+- Mileage (`kilometrage`)
+- Availability status (`disponible`)
 
-## 🧱 Classes identifiées
+**Methods:**
+```cpp
+// Getters
+std::string getMarque() const;
+std::string getModele() const;
+int getKilometrage() const;
+bool getDisponible() const;
 
-### 1. Classe `Vehicule`
+// Setters
+void setKilometrage(int nouveauKilometrage);
+void setDisponibilite(bool etat);
 
-Représente un véhicule dans la flotte.
+// Other
+void afficherDetails() const;
+```
 
-**Attributs privés :**
+#### 2. Employee (`Employe`)
+**Properties:**
+- Name (`nom`)
+- Reserved vehicles list (`vehiculesReserves`)
 
-- `std::string marque` : la marque du véhicule (ex. : "Toyota")
-- `std::string modele` : le modèle du véhicule (ex. : "Corolla")
-- `int kilometrage` : le kilométrage actuel
-- `bool disponible` : indique si le véhicule est disponible ou non
+**Methods:**
+```cpp
+// Getters
+std::string getNom() const;
+std::vector<std::string> getVehiculesReserves() const;
 
-**Méthodes :**
+// Other
+void reserverVehicule(const std::string& modele);
+void afficherReservations() const;
+```
 
-- Constructeur : initialise les attributs
-- Getters :
-  - `std::string getMarque() const;`
-  - `std::string getModele() const;`
-  - `int getKilometrage() const;`
-  - `bool getDisponible() const;`
-- Setters :
-  - `void setKilometrage(int nouveauKilometrage);`
-  - `void setDisponibilite(bool etat);`
-- Surcharge d’opérateur :
-  - `std::ostream& operator<<(std::ostream& os, const Vehicule& v);`
-- Autres :
-  - `void afficherDetails() const;`
+#### 3. Fleet (`Flotte`)
+**Properties:**
+- Vehicle collection (`vehicules`)
+- Employee collection (`employes`)
 
----
+**Methods:**
+```cpp
+void ajouterVehicule(const Vehicule& vehicule);
+void ajouterEmploye(const Employe& employe);
+void reserverVehicule(const std::string& modele, const std::string& nomEmploye);
+void miseAJourKilometrage(const std::string& modele, int nouveauKilometrage);
+void afficherVehiculesDisponibles() const;
+void afficherFlotte() const;
+void afficherReservationsEmployes() const;
+```
 
-### 2. Classe `Employe`
+#### 4. Electric Vehicle (`VehiculeElectrique`)
+**Additional Properties:**
+- Range (`autonomie`)
 
-Représente les employés qui peuvent réserver des véhicules.
+**Methods:**
+```cpp
+void afficherAutonomie() const;
+```
 
-**Attributs privés :**
+## 🚀 Implementation Guide
 
-- `std::string nom` : le nom de l’employé
-- `std::vector<std::string> vehiculesReserves` : liste des modèles réservés
+### Main Program Flow
+1. Initialize vehicles with different characteristics
+2. Add vehicles to the fleet
+3. Create employee accounts
+4. Add employees to the system
+5. Display available vehicles and employees
+6. Process vehicle reservations
+7. Update vehicle mileage after use
+8. Display final fleet status
+9. Implement electric vehicle functionality:
+   - Create electric vehicle instances
+   - Add to fleet
+   - Display electric vehicle details including range
 
-**Méthodes :**
+## 🛠️ Technical Requirements
+- C++ compiler with C++11 support or later
+- Standard Template Library (STL)
+- Input/Output Stream Library
 
-- Constructeur
-- Getters :
-  - `std::string getNom() const;`
-  - `std::vector<std::string> getVehiculesReserves() const;`
-- Autres :
-  - `void reserverVehicule(const std::string& modele);`
-  - `void afficherReservations() const;`
-
----
-
-### 3. Classe `Flotte`
-
-Représente la flotte complète de véhicules.
-
-**Attributs privés :**
-
-- `std::vector<Vehicule> vehicules`
-- `std::vector<Employe> employes`
-
-**Méthodes :**
-
-- Constructeur
-- `void ajouterVehicule(const Vehicule& vehicule);`
-- `void ajouterEmploye(const Employe& employe);`
-- `void reserverVehicule(const std::string& modele, const std::string& nomEmploye);`
-- `void miseAJourKilometrage(const std::string& modele, int nouveauKilometrage);`
-- `void afficherVehiculesDisponibles() const;`
-- `void afficherFlotte() const;`
-- `void afficherReservationsEmployes() const;`
-
----
-
-## 🔧 Travail demandé dans `main()`
-
-1. Créer plusieurs véhicules avec des caractéristiques différentes.
-2. Les ajouter à la flotte.
-3. Créer plusieurs employés.
-4. Les ajouter à la flotte.
-5. Afficher les véhicules disponibles et les employés.
-6. Simuler des réservations.
-7. Mettre à jour le kilométrage après usage.
-8. Afficher l’état final de la flotte.
-9. Ajouter une classe dérivée `VehiculeElectrique` avec :
-
-   - Attribut supplémentaire : `int autonomie`
-   - Constructeur avec initialisation complète
-   - Méthode : `void afficherAutonomie() const;`
-
-   a. Créer des objets `VehiculeElectrique`
-   b. Les ajouter à la flotte
-   c. Afficher leurs détails avec `afficherAutonomie`
-
----
-
-Souhaite-tu aussi que je t’aide à créer le code C++ correspondant à ce cahier des charges ?
+## 📝 Notes
+- All vehicle reservations are for professional use only
+- System maintains real-time availability status
+- Electric vehicles include additional range information
